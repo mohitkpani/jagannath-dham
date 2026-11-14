@@ -10,7 +10,7 @@
 
 <p align="center">
   <img
-    src="jagannath-dham-frontend/src/assets/REadme logo.png"
+    src="jagannath-dham-frontend/src/assets/Readme logo.png"
     width="230"
     height="200"
     alt="Jagannath Dham Logo"
