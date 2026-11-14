@@ -82,110 +82,104 @@ public class QrTicketServiceImpl implements QrTicketService {
             throw new RuntimeException("Unable to generate QR ticket", ex);
         }
     }
-    
 
-@Override
-public byte[] generateQrImage(String token) {
+    @Override
+    public byte[] generateQrImage(String token) {
 
-    try {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
-        BitMatrix bitMatrix = qrCodeWriter.encode(
-                token,
-                BarcodeFormat.QR_CODE,
-                300,
-                300
-        );
+            BitMatrix bitMatrix = qrCodeWriter.encode(
+                    token,
+                    BarcodeFormat.QR_CODE,
+                    300,
+                    300);
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        MatrixToImageWriter.writeToStream(
-                bitMatrix,
-                "PNG",
-                outputStream
-        );
+            MatrixToImageWriter.writeToStream(
+                    bitMatrix,
+                    "PNG",
+                    outputStream);
 
-        return outputStream.toByteArray();
+            return outputStream.toByteArray();
 
-    } catch (WriterException | java.io.IOException ex) {
-        throw new RuntimeException("Unable to generate QR image", ex);
-    }
-}
-
-@Override
-public void deactivateTicket(Long bookingId) {
-
-    QrTicket ticket = qrTicketRepository
-            .findByBookingId(bookingId)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("QR ticket not found"));
-
-    ticket.setActive(false);
-
-    qrTicketRepository.save(ticket);
-}
-
-@Override
-@Transactional(readOnly = true)
-public byte[] getQrImageForUser(Long bookingId, String email) {
-
-    QrTicket ticket = qrTicketRepository
-            .findTicketForUser(bookingId, email)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException(
-                            "QR ticket not found"));
-
-    Booking booking = ticket.getBooking();
-
-    LocalDate today = LocalDate.now(
-            ZoneId.of("Asia/Kolkata"));
-
-    LocalDate darshanDate =
-            booking.getDarshanSlot().getSlotDate();
-
-    if (!Boolean.TRUE.equals(ticket.getActive())
-            || ticket.getUsedAt() != null
-            || booking.getBookingStatus() != BookingStatus.CONFIRMED
-            || booking.getPaymentStatus() != PaymentStatus.SUCCESS
-            || darshanDate.isBefore(today)) {
-
-        throw new ResourceNotFoundException(
-                "This QR ticket is no longer available");
+        } catch (WriterException | java.io.IOException ex) {
+            throw new RuntimeException("Unable to generate QR image", ex);
+        }
     }
 
-    if (ticket.getQrImage() == null
-            || ticket.getQrImage().length == 0) {
+    @Override
+    @Transactional
+    public void deactivateTicket(Long bookingId) {
 
-        throw new ResourceNotFoundException(
-                "QR image is not available for this booking");
+        QrTicket ticket = qrTicketRepository
+                .findByBookingId(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("QR ticket not found"));
+
+        ticket.setActive(false);
+
+        qrTicketRepository.save(ticket);
     }
 
-    return ticket.getQrImage();
-}
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] getQrImageForUser(Long bookingId, String email) {
 
-@Override
-@Transactional
-public void ensureTicketNotUsed(Long bookingId) {
+        QrTicket ticket = qrTicketRepository
+                .findTicketForUser(bookingId, email)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "QR ticket not found"));
 
-    QrTicket ticket = qrTicketRepository
-            .findByBookingIdForUpdate(bookingId)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException(
-                            "QR ticket not found"));
+        Booking booking = ticket.getBooking();
 
-    if (ticket.getUsedAt() != null) {
-        throw new BadRequestException(
-                "This booking cannot be cancelled because its QR ticket has already been used");
+        LocalDate today = LocalDate.now(
+                ZoneId.of("Asia/Kolkata"));
+
+        LocalDate darshanDate = booking.getDarshanSlot().getSlotDate();
+
+        if (!Boolean.TRUE.equals(ticket.getActive())
+                || ticket.getUsedAt() != null
+                || booking.getBookingStatus() != BookingStatus.CONFIRMED
+                || booking.getPaymentStatus() != PaymentStatus.SUCCESS
+                || darshanDate.isBefore(today)) {
+
+            throw new ResourceNotFoundException(
+                    "This QR ticket is no longer available");
+        }
+
+        if (ticket.getQrImage() == null
+                || ticket.getQrImage().length == 0) {
+
+            throw new ResourceNotFoundException(
+                    "QR image is not available for this booking");
+        }
+
+        return ticket.getQrImage();
     }
-}
 
-@Override
-@Transactional(readOnly = true)
-public boolean isTicketUsed(Long bookingId) {
+    @Override
+    @Transactional
+    public void ensureTicketNotUsed(Long bookingId) {
 
-    return qrTicketRepository.findByBookingId(bookingId)
-            .map(ticket -> ticket.getUsedAt() != null)
-            .orElse(false);
-}
+        QrTicket ticket = qrTicketRepository
+                .findByBookingIdForUpdate(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "QR ticket not found"));
+
+        if (ticket.getUsedAt() != null) {
+            throw new BadRequestException(
+                    "This booking cannot be cancelled because its QR ticket has already been used");
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isTicketUsed(Long bookingId) {
+
+        return qrTicketRepository.findByBookingId(bookingId)
+                .map(ticket -> ticket.getUsedAt() != null)
+                .orElse(false);
+    }
 
 }
