@@ -1,0 +1,242 @@
+.admin-categories {
+    padding: 24px;
+    color: #222;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.categories-header h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+}
+
+.categories-header p {
+    margin: 0;
+    color: #777;
+}
+
+.category-add-btn,
+.category-form-actions button,
+.category-card-actions button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.category-add-btn {
+    background: #6639a6;
+    color: white;
+}
+
+.category-message {
+    padding: 12px 16px;
+    background: #f1eafa;
+    color: #6639a6;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.category-form {
+    background: white;
+    border: 1px solid #e8e3ef;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+}
+
+.category-form h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+}
+
+.category-form label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.category-form input,
+.category-form select,
+.category-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #d8d2e0;
+    border-radius: 8px;
+    font: inherit;
+    outline: none;
+}
+
+.category-form input:focus,
+.category-form select:focus,
+.category-form textarea:focus {
+    border-color: #6639a6;
+}
+
+.category-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.category-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.category-form-actions button:first-child {
+    background: #6639a6;
+    color: white;
+}
+
+.category-form-actions button:last-child {
+    background: #eee;
+    color: #333;
+}
+
+.category-form-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.category-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.category-summary div {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category-summary span {
+    color: #777;
+    font-size: 14px;
+}
+
+.category-summary strong {
+    font-size: 25px;
+}
+
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.category-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.category-card-info h3 {
+    margin: 0 0 8px;
+    color: #6639a6;
+}
+
+.category-card-info p {
+    color: #777;
+    margin: 0 0 12px;
+    overflow-wrap: anywhere;
+}
+
+.category-card-info strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.active-status,
+.inactive-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.active-status {
+    background: #e5f7eb;
+    color: #218443;
+}
+
+.inactive-status {
+    background: #fce8e8;
+    color: #bd3434;
+}
+
+.category-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.category-card-actions button:first-child {
+    background: #eee8f6;
+    color: #6639a6;
+}
+
+.category-card-actions button:last-child {
+    background: #f2f2f2;
+    color: #444;
+}
+
+@media (max-width: 768px) {
+    .admin-categories {
+        padding: 16px;
+    }
+
+    .categories-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .category-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .category-card-actions {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .category-card-actions button {
+        flex: 1;
+    }
+}

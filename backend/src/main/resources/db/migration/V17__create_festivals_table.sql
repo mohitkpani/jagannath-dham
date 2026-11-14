@@ -1,0 +1,13 @@
+
+CREATE TABLE festivals (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    month VARCHAR(30) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    description TEXT,
+    significance TEXT,
+    image_url VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
+);

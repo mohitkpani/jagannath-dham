@@ -1,0 +1,2 @@
+ALTER TABLE qr_tickets
+ADD COLUMN qr_image LONGBLOB NULL;
