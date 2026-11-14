@@ -69,8 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
             if (!userDetails.isEnabled()
                     || !userDetails.isAccountNonLocked()
@@ -85,20 +84,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (SecurityContextHolder.getContext()
                     .getAuthentication() == null) {
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
 
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
+                                .buildDetails(request));
 
-                SecurityContext context =
-                        SecurityContextHolder.createEmptyContext();
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 context.setAuthentication(authentication);
 
@@ -124,7 +119,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         response.sendError(
                 HttpServletResponse.SC_UNAUTHORIZED,
-                "Invalid or expired authentication token"
-        );
+                "Invalid or expired authentication token");
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+
+        return request.getServletPath().equals("/api/users/login")
+                || request.getServletPath().equals("/api/users/register");
     }
 }

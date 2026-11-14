@@ -5,6 +5,16 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  // Do not attach an old JWT to public authentication requests
+  const isPublicAuthRequest =
+    config.url?.includes("/users/login") ||
+    config.url?.includes("/users/register");
+
+  if (isPublicAuthRequest) {
+    delete config.headers.Authorization;
+    return config;
+  }
+
   const token = localStorage.getItem("token");
 
   if (token) {
